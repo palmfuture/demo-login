@@ -17,6 +17,32 @@ import { MonoText } from '../components/StyledText';
 
 export default class LoginScreen extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: '',
+            password: '',
+            isFailure: false
+        }
+    }
+
+    handleUsername = (event) => {
+        this.setState({username: event});
+    }
+
+    handlePassword = (event) => {
+        this.setState({password: event});
+    }
+
+    handleLogin = () => {
+        // check username length >= 10 charecters and password not null
+        if(this.state.username.length != 10 || !this.state.password.length) {
+            this.setState({isFailure: true});
+            return false;
+        }
+        this.props.handleLogin();
+    }
+ 
     render() {
         return (
             <KeyboardAvoidingView behavior='padding' style={{
@@ -27,11 +53,11 @@ export default class LoginScreen extends Component {
                 //width : 250,
             }}>
                 <FormLabel color='steelblue' style={{ width: 250, }}>PSU Passport</FormLabel>
-                <FormInput style={{ width: 250, height: 50, }} placeholder=' PSU passport' onChangeText={email => this.setState({ email })} />
+                <FormInput style={{ width: 250, height: 50, }} placeholder=' PSU passport' keyboardType='numeric' onChangeText={this.handleUsername} />
                 <FormLabel color='steelblue' style={{ width: 250, }}>Password</FormLabel>
-                <FormInput style={{ width: 250, height: 50, }} secureTextEntry={true} placeholder=' Password' onChangeText={password => this.setState({ password })} />
+                <FormInput style={{ width: 250, height: 50, }} secureTextEntry={true} placeholder=' Password' onChangeText={this.handlePassword} />
                 <FormLabel></FormLabel>
-                <Button title='Login' backgroundColor='skyblue' onPress={() => this.props.handleLogin()} />
+                <Button title='Login' backgroundColor={this.state.isFailure ? 'pink' : 'skyblue'} onPress={this.handleLogin} />
 
             </KeyboardAvoidingView>
         );
